@@ -1,21 +1,23 @@
 const db = require('../models');
 const Task = db.tasks;
+const User = db.users;
 
 // Get all tasks
 exports.getAllTasks = async (req, res) => {
     // Find all Tasks
-    const tasks = await Task.findAll({});
+    const tasks = await Task.findAll({ include: User });
 
     // Send response
     res.status(200).send({
         success: true,
+        results: tasks.length,
         data: tasks
     });
 }
 
 // Create new task
 exports.createTask = async (req, res) => {
-    const {title, priority, description} = req.body;
+    const {title, priority, description, user_id} = req.body;
 
     // Empty check
     if (!title || !priority || !description) {
@@ -27,6 +29,7 @@ exports.createTask = async (req, res) => {
 
     // Create new task
     const task = await Task.create({
+        user_id,
         title,
         priority,
         description

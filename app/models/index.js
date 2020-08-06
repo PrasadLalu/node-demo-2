@@ -14,4 +14,8 @@ db.sequelize = sequelize;
 db.tasks = require('./task.model.js')(sequelize, Sequelize);
 db.users = require('./user.model.js')(sequelize, Sequelize);
 
+// Relations
+db.tasks.belongsTo(db.users);
+db.users.hasMany(db.tasks);
+
 module.exports = db;
